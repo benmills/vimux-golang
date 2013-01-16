@@ -11,3 +11,9 @@ map <Leader>ra :wa<CR> :GolangTestCurrentPackage<CR>
 ```
 
 This plugin also provides a vim function to get your current package name. You can use that function like this: `echo GolangCurrentPackage()` which will echo the current package of the go file you're in.
+
+## installation
+
+With **[vim-bundle](https://github.com/benmills/vim-bundle)**: `vim-bundle install benmills/vimux-golang`
+
+Otherwise download the latest [tarball](https://github.com/benmills/vimux-golang/tarball/master), extract it and move `plugin/vimux-golang.vim` inside `~/.vim/plugin`. If you're using [pathogen](https://github.com/tpope/vim-pathogen), then move the entire folder extracted from the tarball into `~/.vim/bundle`.
