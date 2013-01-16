@@ -1,0 +1,13 @@
+# vimux-golang
+
+Run golang tests in vim.
+
+## usage
+
+Add this to your `.vimrc` or inside `.vim/ftplugin/go.vim` if you want only use this mapping with files that have the `go` filetype.
+
+```viml
+map <Leader>ra :wa<CR> :GolangTestCurrentPackage<CR>
+```
+
+This plugin also provides a vim function to get your current package name. You can use that function like this: `echo GolangCurrentPackage()` which will echo the current package of the go file you're in.
