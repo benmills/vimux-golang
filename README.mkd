@@ -8,7 +8,10 @@ Add this to your `.vimrc` or inside `.vim/ftplugin/go.vim` if you want only use 
 
 ```viml
 map <Leader>ra :wa<CR> :GolangTestCurrentPackage<CR>
+map <Leader>rf :wa<CR> :GolangTestFocused<CR>
 ```
+
+`GolangTestFocused` will find the first `func` above your current line that starts with `Test` and run that with `go test -run <test name>`.
 
 This plugin also provides a vim function to get your current package name. You can use that function like this: `echo GolangCurrentPackage()` which will echo the current package of the go file you're in.
 
