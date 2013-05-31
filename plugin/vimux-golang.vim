@@ -32,8 +32,16 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("clear; go test -run " . test_name . " -v " . GolangCurrentPackage())
+    call VimuxRunCommand("clear; go test -run '" . test_name . "$' -v " . GolangCurrentPackage())
   else
     echo "No test found"
+  endif
+endfunction
+
+function! GolangRunOnChange()
+  if executable("inotifywait")
+    call VimuxRunCommand("while true; do inotifywait -q ".bufname("%")."; clear; go run play.go; done")
+  else
+    echo "You must have inotify-tools installed"
   endif
 endfunction
