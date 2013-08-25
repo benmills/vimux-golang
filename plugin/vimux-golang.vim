@@ -16,7 +16,11 @@ function! GolangCurrentPackage()
     endif
   endfor
 
-  return join(packagePath, "/")
+  if packagePath == [packageName]
+    return "."
+  else
+    return join(packagePath, "/")
+  endif
 endfunction
 
 function! GolangTestCurrentPackage()
