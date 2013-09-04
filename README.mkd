@@ -2,7 +2,7 @@
 
 Run golang tests in vim.
 
-## usage
+## Usage
 
 Add this to your `.vimrc` or inside `.vim/ftplugin/go.vim` if you want only use this mapping with files that have the `go` filetype.
 
@@ -11,11 +11,11 @@ map <Leader>ra :wa<CR> :GolangTestCurrentPackage<CR>
 map <Leader>rf :wa<CR> :GolangTestFocused<CR>
 ```
 
-`GolangTestFocused` will find the first `func` above your current line that starts with `Test` and run that with `go test -run <test name>`.
+`GolangTestFocused` will find the first `func` above your current line that starts with `Test` and run that with `go test -run <test name>`. If you're using [examples](https://github.com/lionelbarrow/examples) this plugin will use `-examples.run` rather than `-run`.
 
-This plugin also provides a vim function to get your current package name. You can use that function like this: `echo GolangCurrentPackage()` which will echo the current package of the go file you're in.
+This plugin assumes you will be testing the local package. For example if you run `GolangTestCurrentPackage` the resulting command would be: `go test -v .`.
 
-## installation
+## Installation
 
 With **[vim-bundle](https://github.com/benmills/vim-bundle)**: `vim-bundle install benmills/vimux-golang`
 
