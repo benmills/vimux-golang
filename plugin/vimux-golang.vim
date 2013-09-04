@@ -1,26 +1,14 @@
 command! GolangTestCurrentPackage :call GolangTestCurrentPackage()
 command! GolangTestFocused :call GolangTestFocused()
 
-function! GolangCurrentPackage()
-  let packageLine = search("package", "s")
+function! GolangUsingExamples()
+  let foundExamplesImport = search("github.com/lionelbarrow/examples", "bs") > 0
   ''
+  return foundExamplesImport
+endfunction
 
-  let packageName = split(getline(packageLine), " ")[1]
-  let packagePath = [packageName]
-
-  for i in split(bufname("%"), "/")[1:]
-    if i == packageName
-      break
-    else
-      call insert(packagePath, i)
-    endif
-  endfor
-
-  if packagePath == [packageName]
-    return "."
-  else
-    return join(packagePath, "/")
-  endif
+function! GolangCurrentPackage()
+  return "."
 endfunction
 
 function! GolangTestCurrentPackage()
@@ -28,6 +16,10 @@ function! GolangTestCurrentPackage()
 endfunction
 
 function! GolangTestFocused()
+  if GolangUsingExamples()
+    return GolangTestFocusedExample()
+  endif
+
   let test_line = search("func Test", "bs")
   ''
 
@@ -37,6 +29,21 @@ function! GolangTestFocused()
     let test_name = split(test_name_raw, "(")[0]
 
     call VimuxRunCommand("clear; go test -run '" . test_name . "$' -v " . GolangCurrentPackage())
+  else
+    echo "No test found"
+  endif
+endfunction
+
+function! GolangTestFocusedExample()
+  let test_line = search("It(", "bs")
+  ''
+
+  if test_line > 0
+    let line = getline(test_line)
+    let raw_test_description = substitute(matchstr(line, 'It(".*"'), 'It(', '', '')
+    let test_name = substitute(raw_test_description, '"', '', 'g')
+
+    call VimuxRunCommand("clear; go test -examples.run '" . test_name . "' -v " . GolangCurrentPackage())
   else
     echo "No test found"
   endif
