@@ -2,9 +2,12 @@ command! GolangTestCurrentPackage :call GolangTestCurrentPackage()
 command! GolangTestFocused :call GolangTestFocused()
 
 function! GolangUsingExamples()
-  let foundExamplesImport = search("github.com/lionelbarrow/examples", "bs") > 0
-  ''
-  return foundExamplesImport
+  let examples_import_line_number = search("github.com\/lionelbarrow\/examples", "bs")
+  if examples_import_line_number
+    ''
+  endif
+
+  return examples_import_line_number
 endfunction
 
 function! GolangCurrentPackage()
