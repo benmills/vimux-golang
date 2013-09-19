@@ -19,10 +19,6 @@ function! GolangTestCurrentPackage()
 endfunction
 
 function! GolangTestFocused()
-  if GolangUsingExamples()
-    return GolangTestFocusedExample()
-  endif
-
   let test_line = search("func Test", "bs")
   ''
 
@@ -31,13 +27,21 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("clear; go test -run '" . test_name . "$' -v " . GolangCurrentPackage())
+    call VimuxRunCommand("clear; go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
   else
     echo "No test found"
   endif
 endfunction
 
-function! GolangTestFocusedExample()
+function! GolangFocusedCommand(test_name)
+  if GolangUsingExamples()
+    return "-run '" . a:test_name . "$' -examples.run '" . GolangFocusedExampleName() . "'"
+  else
+    return "-run '" . a:test_name . "$'"
+  endif
+endfunction
+
+function! GolangFocusedExampleName()
   let test_line = search("It(", "bs")
   ''
 
@@ -45,10 +49,10 @@ function! GolangTestFocusedExample()
     let line = getline(test_line)
     let raw_test_description = substitute(matchstr(line, 'It(".*"'), 'It(', '', '')
     let test_name = substitute(raw_test_description, '"', '', 'g')
-
-    call VimuxRunCommand("clear; go test -examples.run '" . test_name . "' -v " . GolangCurrentPackage())
+    return substitute(test_name, "'", '', '')
   else
-    echo "No test found"
+    echo "No example test found"
+    return ""
   endif
 endfunction
 
