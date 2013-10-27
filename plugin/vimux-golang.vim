@@ -14,8 +14,12 @@ function! GolangCurrentPackage()
   return "."
 endfunction
 
+function! GolangCwd()
+  return escape(shellescape(expand("%:p:h"), 1), '$')
+endfunction
+
 function! GolangTestCurrentPackage()
-  call VimuxRunCommand("cd " . expand("%:p:h") . " && clear && go test -v " . GolangCurrentPackage())
+  call VimuxRunCommand("cd " . GolangCwd() . " && clear && go test -v " . GolangCurrentPackage())
 endfunction
 
 function! GolangTestFocused()
@@ -27,7 +31,7 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("cd " . expand("%:p:h") . " && clear && go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
+    call VimuxRunCommand("cd " . GolandCwd() . " && clear && go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
   else
     echo "No test found"
   endif
