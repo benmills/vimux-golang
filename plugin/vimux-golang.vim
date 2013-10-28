@@ -31,7 +31,7 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("cd " . GolandCwd() . " && clear && go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
+    call VimuxRunCommand("cd " . GolangCwd() . " && clear && go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
   else
     echo "No test found"
   endif
