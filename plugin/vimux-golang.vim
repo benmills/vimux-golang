@@ -1,5 +1,6 @@
 command! GolangTestCurrentPackage :call GolangTestCurrentPackage()
 command! GolangTestFocused :call GolangTestFocused()
+command! GolangRun :call GolangRun()
 
 function! GolangUsingExamples()
   let examples_import_line_number = search("github.com\/lionelbarrow\/examples", "bs")
@@ -20,6 +21,10 @@ endfunction
 
 function! GolangTestCurrentPackage()
   call VimuxRunCommand("cd " . GolangCwd() . " && clear && go test -v " . GolangCurrentPackage())
+endfunction
+
+function! GolangRun()
+  call VimuxRunCommand("cd " . GolangCwd() . " && clear && go run " . expand('%:t'))
 endfunction
 
 function! GolangTestFocused()
