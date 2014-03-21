@@ -2,6 +2,16 @@ command! GolangTestCurrentPackage :call GolangTestCurrentPackage()
 command! GolangTestFocused :call GolangTestFocused()
 command! GolangRun :call GolangRun()
 
+function! ShellCommandSeperator()
+  if empty(matchstr($SHELL, 'fish'))
+    return '&&'
+  else
+    return '; and'
+  endif
+endfunction
+
+let s:separator = ShellCommandSeperator()
+
 function! GolangUsingExamples()
   let examples_import_line_number = search("github.com\/lionelbarrow\/examples", "bs")
   if examples_import_line_number
@@ -20,11 +30,11 @@ function! GolangCwd()
 endfunction
 
 function! GolangTestCurrentPackage()
-  call VimuxRunCommand("cd " . GolangCwd() . " && clear && go test -v " . GolangCurrentPackage())
+  call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go test -v " . GolangCurrentPackage())
 endfunction
 
 function! GolangRun()
-  call VimuxRunCommand("cd " . GolangCwd() . " && clear && go run " . expand('%:t'))
+  call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go run " . expand('%:t'))
 endfunction
 
 function! GolangTestFocused()
@@ -36,7 +46,7 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("cd " . GolangCwd() . " && clear && go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
+    call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
   else
     echo "No test found"
   endif
