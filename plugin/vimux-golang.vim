@@ -2,15 +2,16 @@ command! GolangTestCurrentPackage :call GolangTestCurrentPackage()
 command! GolangTestFocused :call GolangTestFocused()
 command! GolangRun :call GolangRun()
 
-function! ShellCommandSeperator()
+function! ShellCommandAndSeperator()
   if empty(matchstr($SHELL, 'fish'))
-    return '&&'
+    return ' && '
   else
-    return '; and'
+    return '; and '
   endif
 endfunction
 
-let s:separator = ShellCommandSeperator()
+let s:andsep = ShellCommandAndSeperator()
+let s:semisep = "; "
 
 function! GolangUsingExamples()
   let examples_import_line_number = search("github.com\/lionelbarrow\/examples", "bs")
@@ -30,11 +31,11 @@ function! GolangCwd()
 endfunction
 
 function! GolangTestCurrentPackage()
-  call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go test -v " . GolangCurrentPackage())
+  call VimuxRunCommand("pushd " . GolangCwd() . " >/dev/null" . s:andsep . "clear" . s:andsep . "go test -v " . GolangCurrentPackage() . s:semisep . "popd > /dev/null")
 endfunction
 
 function! GolangRun()
-  call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go run " . expand('%:t'))
+  call VimuxRunCommand("pushd " . GolangCwd() . " >/dev/null" . s:andsep . "clear" . s:andsep . "go run " . expand('%:t') . s:semisep . "popd > /dev/null")
 endfunction
 
 function! GolangTestFocused()
@@ -46,7 +47,7 @@ function! GolangTestFocused()
     let test_name_raw = split(line, " ")[1]
     let test_name = split(test_name_raw, "(")[0]
 
-    call VimuxRunCommand("cd " . GolangCwd() . " " . s:separator . " clear " . s:separator . " go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage())
+    call VimuxRunCommand("pushd " . GolangCwd() . " >/dev/null" . s:andsep . "clear" . s:andsep . "go test " . GolangFocusedCommand(test_name) . " -v " . GolangCurrentPackage() . s:semisep . "popd > /dev/null")
   else
     echo "No test found"
   endif
